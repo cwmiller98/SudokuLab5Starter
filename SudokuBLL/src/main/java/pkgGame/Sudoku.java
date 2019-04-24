@@ -581,7 +581,7 @@ public class Sudoku extends LatinSquare implements Serializable {
 	 * @author Bert.Gibbons
 	 *
 	 */
-	private class SudokuCell extends Cell {
+	public class SudokuCell extends Cell {
 
 		private int iRow;
 		private int iCol;
