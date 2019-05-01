@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
 
+import pkgEnum.eGameDifficulty;
 import pkgEnum.ePuzzleViolation;
 import pkgHelper.LatinSquare;
 import pkgHelper.PuzzleViolation;
@@ -46,6 +47,8 @@ public class Sudoku extends LatinSquare implements Serializable {
 	private int iSqrtSize;
 
 	private HashMap<Integer, SudokuCell> cells = new HashMap<Integer, SudokuCell>();
+
+	private eGameDifficulty eGameDifficulty;
 	
 	/**
 	 * Sudoku - for Lab #2... do the following:
@@ -659,6 +662,19 @@ public class Sudoku extends LatinSquare implements Serializable {
 			return (SudokuCell)cells.get(Objects.hash(iRow,iCol));		
 
 		}
+
+		public void setlstRemainingValidValues(HashSet<Integer> allValidCellValues) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public ArrayList<Integer> getLstRemainingValidValues() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	
+		
+	}
 	public void SetRemainingCells() {
 		for (int iRow = 0; iRow < iSize; iRow++) {
 			for (int iCol = 0; iCol < iSize; iCol++) {
@@ -668,10 +684,41 @@ public class Sudoku extends LatinSquare implements Serializable {
 			}
 		}
 	}
-
-	private void setlstRemainingValidValues(HashSet<Integer> allValidCellValues) {
-		// TODO Auto-generated method stub
-		
+	
+	public Sudoku(int iSize, eGameDifficulty eGD) throws Exception
+	{
+		this(iSize);
+		this.eGameDifficulty = eGD;
+		RemoveCells();
 	}
+	
+	private void RemoveCells() {
+		SetRemainingCells();
+		while (!(isDifficultyMet(PossibleValuesMultiplier(cells)))) {
+			Random rand = new SecureRandom();
+			int iRandRow = rand.nextInt(iSize);
+			int iRandCol = rand.nextInt(iSize);
+			getPuzzle()[iRandRow][iRandCol]=0;	
+			SetRemainingCells();
+		}
+	}
+	
+	private int PossibleValuesMultiplier(HashMap<Integer,SudokuCell> cells) {
+		int numPos = 1;
+		for (SudokuCell c: cells.values()) 
+		{
+			ArrayList<Integer> pos= c.getLstRemainingValidValues();
+			numPos*= pos.size();
+		}
+		return numPos;
+
 }
-}
+	private Sudoku() throws Exception {
+		this.eGameDifficulty = pkgEnum.eGameDifficulty.EASY;
+	}
+	
+	private boolean isDifficultyMet(int iDifficulty) {
+		return this.eGameDifficulty.getiDifficulty() < iDifficulty ? true : false;
+	}
+	}
+	
