@@ -586,6 +586,7 @@ public class Sudoku extends LatinSquare implements Serializable {
 		private int iRow;
 		private int iCol;
 		private ArrayList<Integer> lstValidValues = new ArrayList<Integer>();
+		private ArrayList<Integer> lstRemainingValidValues = new ArrayList<Integer>();
 
 		public SudokuCell(int iRow, int iCol) {
 			super(iRow, iCol);
@@ -658,5 +659,19 @@ public class Sudoku extends LatinSquare implements Serializable {
 			return (SudokuCell)cells.get(Objects.hash(iRow,iCol));		
 
 		}
+	public void SetRemainingCells() {
+		for (int iRow = 0; iRow < iSize; iRow++) {
+			for (int iCol = 0; iCol < iSize; iCol++) {
+				SudokuCell c = new SudokuCell(iRow, iCol);
+				c.setlstRemainingValidValues(getAllValidCellValues(iCol, iRow));
+				cells.put(c.hashCode(), c);
+			}
+		}
 	}
+
+	private void setlstRemainingValidValues(HashSet<Integer> allValidCellValues) {
+		// TODO Auto-generated method stub
+		
+	}
+}
 }
